@@ -39,8 +39,31 @@ return {
         -- Pin / unpin buffer (keeps it visible across cycles)
         vim.keymap.set("n", "<leader>bp", "<cmd>BufferLineTogglePin<CR>", { desc = "Pin buffer" })
 
-        -- Close buffers
-        vim.keymap.set("n", "<leader>bc", "<cmd>bdelete<CR>",                          { desc = "Close current buffer" })
+        -- Close current buffer cleanly:
+        -- - if other buffers exist: switch to next, delete current
+        -- - if this was the last buffer and there are other windows (e.g. tree): close the window
+        -- - if it's the only window left: open a fresh empty buffer (can't close last window)
+        local function close_buffer()
+            if vim.bo.filetype == "NvimTree" then return end
+
+            local bufnr  = vim.api.nvim_get_current_buf()
+            local listed = vim.fn.getbufinfo({ buflisted = 1 })
+
+            if #listed > 1 then
+                vim.cmd("bnext")
+                pcall(vim.cmd, "bdelete " .. bufnr)
+            else
+                local wins = vim.api.nvim_list_wins()
+                if #wins > 1 then
+                    vim.cmd("close")
+                    pcall(vim.cmd, "bdelete " .. bufnr)
+                else
+                    vim.cmd("enew")
+                    pcall(vim.cmd, "bdelete " .. bufnr)
+                end
+            end
+        end
+        vim.keymap.set("n", "<leader>bc", close_buffer,                                { desc = "Close current buffer" })
         vim.keymap.set("n", "<leader>bo", "<cmd>BufferLineCloseOthers<CR>",            { desc = "Close other buffers" })
 
         -- Jump to buffer by ordinal position (Cmd+1..9 style)
