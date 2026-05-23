@@ -17,7 +17,7 @@ return {
                     "pyright",
                     "gopls",
                 },
-                automatic_installation = true,
+                automatic_enable = true,
             })
         end,
     },

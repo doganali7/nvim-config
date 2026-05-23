@@ -4,9 +4,7 @@ return {
         branch = "main",
         build = ":TSUpdate",
         config = function()
-            local ts = require("nvim-treesitter")
-
-            ts.install({
+            require("nvim-treesitter").install({
                 "javascript", "typescript", "c", "lua",
                 "rust", "go", "python", "vim", "vimdoc",
                 "bash", "html", "css", "json", "yaml", "markdown",

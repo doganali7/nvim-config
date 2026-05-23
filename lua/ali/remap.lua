@@ -1,7 +1,7 @@
 vim.g.mapleader = " "
 
--- File explorer (netrw)
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+-- File explorer (netrw) — replaced by nvim-tree (<C-b> / <leader>e)
+-- vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
 -- Move selected lines up/down in visual mode
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
