@@ -12,10 +12,11 @@ return {
             require("mason-lspconfig").setup({
                 ensure_installed = {
                     "lua_ls",
-                    "ts_ls",
-                    "rust_analyzer",
-                    "pyright",
-                    "gopls",
+                    "ts_ls",       -- Angular .ts
+                    "angularls",   -- Angular templates
+                    "html",        -- template HTML
+                    "cssls",       -- component styles
+                    "clangd",      -- C
                 },
                 automatic_enable = true,
             })
@@ -68,10 +69,11 @@ return {
 
             vim.lsp.enable({
                 "lua_ls",
-                "ts_ls",
-                "rust_analyzer",
-                "pyright",
-                "gopls",
+                "ts_ls",       -- Angular .ts
+                "angularls",   -- Angular templates
+                "html",        -- template HTML
+                "cssls",       -- component styles
+                "clangd",      -- C
             })
         end,
     },

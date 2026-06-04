@@ -39,3 +39,5 @@ vim.opt.listchars = {
     precedes = '«',
     nbsp     = '␣',
 }
+
+vim.opt.completeopt = "menu,menuone,noselect"

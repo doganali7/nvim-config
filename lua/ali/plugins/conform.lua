@@ -10,14 +10,16 @@ return {
                 javascript = { "prettierd", "prettier", stop_after_first = true },
                 typescript = { "prettierd", "prettier", stop_after_first = true },
                 html = { "prettierd", "prettier", stop_after_first = true },
+                htmlangular = { "prettierd", "prettier", stop_after_first = true },
                 css = { "prettierd", "prettier", stop_after_first = true },
+                scss = { "prettierd", "prettier", stop_after_first = true },
                 json = { "prettierd", "prettier", stop_after_first = true },
                 yaml = { "prettierd", "prettier", stop_after_first = true },
                 markdown = { "prettierd", "prettier", stop_after_first = true },
                 go = { "gofumpt" },
-                rust = { "rustfmt" },
+                c = { "clang-format" },
             },
-            -- Set to true for format-on-save (optional — ThePrimeagen prefers manual)
+            -- Set to true for format-on-save
             format_on_save = nil,
         })
 
@@ -26,7 +28,7 @@ return {
             require("conform").format({
                 lsp_fallback = true,
                 async = false,
-                timeout_ms = 1000,
+                timeout_ms = 2000,
             })
         end, { desc = "Format buffer (conform)" })
     end,

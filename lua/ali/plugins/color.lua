@@ -2,15 +2,23 @@ return {
     {
         "rose-pine/neovim",
         name = "rose-pine",
+        priority = 1000,
         config = function()
             require("rose-pine").setup({
-                disable_background = true,   -- transparent background
+                variant = "main", -- auto, main, moon, or dawn
+                dark_variant = "main",
+                styles = {
+                    italic = false,
+                },
+                palette = {
+                    main = {
+                        base = "#121212",
+                        surface = "#1a1a1a",
+                        overlay = "#222222",
+                    },
+                },
             })
             vim.cmd.colorscheme("rose-pine")
-
-            -- Make floating windows transparent too
-            vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-            vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
         end,
     },
 }
