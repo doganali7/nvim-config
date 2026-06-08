@@ -24,12 +24,30 @@ return {
     },
     {
         "neovim/nvim-lspconfig",
+        -- Load as the first real file is being read (BufReadPre fires before
+        -- FileType), so vim.lsp.enable's FileType autocmd is registered in
+        -- time to attach to that very first buffer.
+        event = { "BufReadPre", "BufNewFile" },
         dependencies = {
             "williamboman/mason-lspconfig.nvim",
             "hrsh7th/cmp-nvim-lsp",
         },
         config = function()
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+            -- How diagnostics (errors/warnings) are displayed.
+            -- Without this, modern Neovim shows no inline text by default.
+            vim.diagnostic.config({
+                virtual_text = true,    -- show the message inline after the line
+                signs = true,           -- gutter signs
+                underline = true,       -- underline the offending code
+                update_in_insert = false, -- don't redraw while typing (refresh on leaving insert)
+                severity_sort = true,   -- show the most severe diagnostic first
+                float = {
+                    border = "rounded",
+                    source = true,      -- show which server produced the message
+                },
+            })
 
             -- Keymaps: only active when an LSP server attaches
             vim.api.nvim_create_autocmd("LspAttach", {
