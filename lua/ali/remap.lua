@@ -34,8 +34,8 @@ vim.keymap.set("n", "Q", "<nop>")
 -- New tmux window (requires tmux-sessionizer script)
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
--- Format current buffer (uses LSP or conform)
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
+-- Format current buffer: handled by conform.nvim (see plugins/conform.lua),
+-- which lazy-loads on this keypress and falls back to LSP when no formatter.
 
 -- Quickfix navigation
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
