@@ -2,6 +2,21 @@ return {
     "ThePrimeagen/harpoon",
     branch = "harpoon2",
     dependencies = { "nvim-lua/plenary.nvim" },
+    -- Trigger-only lazy-load: lhs strings with no rhs make lazy.nvim load the
+    -- plugin on first press and re-feed the key; the real mappings are the
+    -- ones defined in config() below.
+    keys = {
+        "<leader>a",
+        "<C-e>",
+        "<C-h>",
+        "<C-t>",
+        "<C-n>",
+        "<C-s>",
+        "<C-S-P>",
+        "<C-S-N>",
+        "<F13>",
+        "<F14>",
+    },
     config = function()
         local harpoon = require("harpoon")
 
@@ -13,6 +28,8 @@ return {
         -- current window, so nvim_win_get_width(0) is the float's real width,
         -- and harpoon matches list lines on their *displayed* form, so the
         -- real path is always preserved on save/select.
+        local path_sep = package.config:sub(1, 1)
+
         local function fit_path(path)
             local width = vim.api.nvim_win_get_width(0) - 5 -- number gutter + padding
             if width < 10 then width = 10 end
@@ -21,7 +38,7 @@ return {
                 return path
             end
 
-            local parts = vim.split(path, "/", { plain = true })
+            local parts = vim.split(path, path_sep, { plain = true })
             local n = #parts
             -- `full` = how many trailing parts (filename first) stay intact
             for full = n - 1, 1, -1 do
@@ -33,7 +50,7 @@ return {
                         out[i] = parts[i]:sub(1, 1)
                     end
                 end
-                local s = table.concat(out, "/")
+                local s = table.concat(out, path_sep)
                 if vim.api.nvim_strwidth(s) <= width or full == 1 then
                     return s
                 end
@@ -70,10 +87,17 @@ return {
         vim.keymap.set("n", "<C-s>", function() harpoon:list():select(4) end,
             { desc = "Harpoon file 4" })
 
-        -- Cycle through the harpoon list
-        vim.keymap.set("n", "<C-S-P>", function() harpoon:list():prev() end,
-            { desc = "Harpoon prev" })
-        vim.keymap.set("n", "<C-S-N>", function() harpoon:list():next() end,
-            { desc = "Harpoon next" })
+        -- Cycle through the harpoon list.
+        -- WezTerm translates Ctrl+Shift+N -> <F13> and Ctrl+Shift+P -> <F14>
+        -- (see ~/.wezterm.lua) because terminals can't unambiguously encode
+        -- Ctrl+Shift+<letter>. The <C-S-*> maps are kept as well so this still
+        -- works under terminals that do support the kitty keyboard protocol.
+        local function harpoon_prev() harpoon:list():prev() end
+        local function harpoon_next() harpoon:list():next() end
+
+        vim.keymap.set("n", "<C-S-P>", harpoon_prev, { desc = "Harpoon prev" })
+        vim.keymap.set("n", "<C-S-N>", harpoon_next, { desc = "Harpoon next" })
+        vim.keymap.set("n", "<F14>", harpoon_prev, { desc = "Harpoon prev" })
+        vim.keymap.set("n", "<F13>", harpoon_next, { desc = "Harpoon next" })
     end,
 }

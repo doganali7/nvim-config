@@ -32,7 +32,9 @@ vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 vim.keymap.set("n", "Q", "<nop>")
 
 -- New tmux window (requires tmux-sessionizer script)
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+-- Unix-only: tmux doesn't exist on Windows — re-enable if this config is
+-- ever used on Linux/macOS.
+-- vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
 -- Format current buffer: handled by conform.nvim (see plugins/conform.lua),
 -- which lazy-loads on this keypress and falls back to LSP when no formatter.
@@ -47,7 +49,9 @@ vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
 -- Make file executable
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
+-- Unix-only: chmod doesn't exist on Windows (:! runs via cmd.exe) —
+-- re-enable if this config is ever used on Linux/macOS.
+-- vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 -- Copy file paths to system clipboard
 vim.keymap.set("n", "<leader>cf", function()

@@ -1,6 +1,5 @@
--- Shared formatter entry point so the lazy `keys` spec and the post-config
--- keymap stay in sync. The callback fires even in synchronous mode, so we can
--- report the outcome.
+-- Formatter entry point for the lazy `keys` spec. The callback fires even in
+-- synchronous mode, so we can report the outcome.
 local function format_buffer()
     require("conform").format({
         lsp_format = "fallback",
@@ -19,7 +18,8 @@ end
 
 return {
     "stevearc/conform.nvim",
-    event = { "BufWritePre" },
+    -- No BufWritePre event: format_on_save is disabled, so there's nothing
+    -- for the plugin to do on save. keys/cmd below lazy-load it on demand.
     cmd = { "ConformInfo" },
     keys = {
         {
@@ -49,10 +49,5 @@ return {
             -- Set to true for format-on-save
             format_on_save = nil,
         })
-
-        -- Keymap is defined in the lazy `keys` spec above so it works from the
-        -- first keypress (before any save triggers BufWritePre). Kept here too
-        -- as a harmless re-assertion once the plugin's config runs.
-        vim.keymap.set({ "n", "v" }, "<leader>f", format_buffer, { desc = "Format buffer (conform)" })
     end,
 }

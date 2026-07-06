@@ -2,11 +2,28 @@ return {
     "nvim-telescope/telescope.nvim",
     branch = "master",
     dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-        local builtin = require("telescope.builtin")
-        vim.keymap.set("n", "<leader>pf", builtin.find_files, { desc = "Find files" })
-        vim.keymap.set("n", "<C-p>", builtin.git_files, { desc = "Git files" })
-        vim.keymap.set("n", "<leader>ps", builtin.live_grep, { desc = "Live grep" })
-        vim.keymap.set("n", "<leader>vh", builtin.help_tags, { desc = "Help tags" })
-    end,
+    -- Lazy-loaded on first keypress; require("telescope.builtin") inside the
+    -- callbacks resolves after the plugin loads.
+    keys = {
+        {
+            "<leader>pf",
+            function() require("telescope.builtin").find_files() end,
+            desc = "Find files",
+        },
+        {
+            "<C-p>",
+            function() require("telescope.builtin").git_files() end,
+            desc = "Git files",
+        },
+        {
+            "<leader>ps",
+            function() require("telescope.builtin").live_grep() end,
+            desc = "Live grep",
+        },
+        {
+            "<leader>vh",
+            function() require("telescope.builtin").help_tags() end,
+            desc = "Help tags",
+        },
+    },
 }

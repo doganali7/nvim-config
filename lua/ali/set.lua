@@ -20,6 +20,12 @@ vim.opt.undofile = true
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 
+-- Case-insensitive search unless the pattern has a capital letter.
+-- Deliberately off: search stays exact-case. (<leader>s substitute is
+-- unaffected either way — it forces case-sensitivity with the I flag.)
+-- vim.opt.ignorecase = true
+-- vim.opt.smartcase = true
+
 vim.opt.termguicolors = true
 
 vim.opt.scrolloff = 8

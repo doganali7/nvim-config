@@ -1,12 +1,16 @@
 return {
     {
         "williamboman/mason.nvim",
+        -- Lazy: loads via the dependency chain when nvim-lspconfig loads at
+        -- BufReadPre, or on :Mason — no work at startup before a file opens.
+        cmd = "Mason",
         config = function()
             require("mason").setup()
         end,
     },
     {
         "williamboman/mason-lspconfig.nvim",
+        lazy = true, -- pulled in as a dependency of nvim-lspconfig
         dependencies = { "williamboman/mason.nvim" },
         config = function()
             require("mason-lspconfig").setup({
@@ -71,20 +75,9 @@ return {
                 end,
             })
 
-            -- Native Neovim 0.11 API (no deprecation warning)
-            vim.lsp.config("lua_ls", {
-                capabilities = capabilities,
-                settings = {
-                    Lua = {
-                        diagnostics = { globals = { "vim" } },
-                        workspace = {
-                            library = vim.api.nvim_get_runtime_file("", true),
-                            checkThirdParty = false,
-                        },
-                    },
-                },
-            })
-
+            -- lua_ls needs no manual settings: lazydev.nvim (plugins/lazydev.lua)
+            -- feeds it the vim runtime types and the plugin modules actually
+            -- require()d, instead of indexing every runtime path up front.
             vim.lsp.config("*", {
                 capabilities = capabilities,
             })
