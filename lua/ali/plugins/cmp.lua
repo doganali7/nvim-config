@@ -1,43 +1,37 @@
 return {
-    {
-        "hrsh7th/nvim-cmp",
-        event = "InsertEnter",
-        dependencies = {
-            "hrsh7th/cmp-nvim-lsp",
-            "hrsh7th/cmp-buffer",
-            "hrsh7th/cmp-path",
-            "L3MON4D3/LuaSnip",
-            "saadparwaiz1/cmp_luasnip",
-            "rafamadriz/friendly-snippets",
-        },
-        config = function()
-            local cmp = require("cmp")
-            local luasnip = require("luasnip")
-
-            require("luasnip.loaders.from_vscode").lazy_load()
-
-            cmp.setup({
-                snippet = {
-                    expand = function(args)
-                        luasnip.lsp_expand(args.body)
-                    end,
-                },
-                mapping = cmp.mapping.preset.insert({
-                    ["<C-p>"] = cmp.mapping.select_prev_item(),
-                    ["<C-n>"] = cmp.mapping.select_next_item(),
-                    ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-                    ["<C-Space>"] = cmp.mapping.complete(),
-                    ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-                    ["<C-f>"] = cmp.mapping.scroll_docs(4),
-                }),
-                sources = cmp.config.sources({
-                    { name = "nvim_lsp" },
-                    { name = "luasnip" },
-                }, {
-                    { name = "buffer" },
-                    { name = "path" },
-                }),
-            })
-        end,
-    },
+	{
+		"saghen/blink.cmp",
+		-- Pin to a release so lazy.nvim downloads the prebuilt fuzzy-matcher
+		-- binary; building it locally would require nightly Rust.
+		version = "1.*",
+		dependencies = { "rafamadriz/friendly-snippets" },
+		opts = {
+			keymap = {
+				-- <C-n>/<C-p> select, <C-y> accept
+				-- <C-Space> open menu / toggle docs, <C-e> cancel.
+				preset = "default",
+				["<C-d>"] = { "scroll_documentation_up", "fallback" },
+				["<C-f>"] = { "scroll_documentation_down", "fallback" },
+				["<C-l>"] = { "snippet_forward", "fallback" },
+				["<C-h>"] = { "snippet_backward", "fallback" },
+				["<C-j>"] = { "snippet_backward", "fallback" },
+			},
+			completion = {
+				-- show docs manual (<C-Space>).
+				documentation = { auto_show = true, auto_show_delay_ms = 200 },
+			},
+			sources = {
+				default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+				providers = {
+					lazydev = {
+						name = "LazyDev",
+						module = "lazydev.integrations.blink",
+						score_offset = 100,
+					},
+					lsp = { fallbacks = { "buffer" } },
+				},
+			},
+		},
+		opts_extend = { "sources.default" },
+	},
 }

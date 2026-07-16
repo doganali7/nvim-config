@@ -13,12 +13,10 @@ vim.opt.smartindent = true
 vim.opt.wrap = false
 
 vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir"
 vim.opt.undofile = true
 
 vim.opt.hlsearch = false
-vim.opt.incsearch = true
 
 -- Case-insensitive search unless the pattern has a capital letter.
 -- Deliberately off: search stays exact-case. (<leader>s substitute is
@@ -37,14 +35,19 @@ vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "80"
 
-vim.opt.list = true
+vim.opt.list = false
 vim.opt.listchars = {
-    space    = '·',
-    tab      = '→ ',
-    trail    = '•',
-    extends  = '»',
-    precedes = '«',
-    nbsp     = '␣',
+	space = "·",
+	tab = "→ ",
+	trail = "•",
+	extends = "»",
+	precedes = "«",
+	nbsp = "␣",
 }
 
 vim.opt.completeopt = "menu,menuone,noselect"
+
+-- One border style for every floating window: LSP hover, signature help,
+-- diagnostic floats, and plugins that follow the option (blink.cmp does).
+-- Replaces the per-float border in vim.diagnostic.config.
+vim.opt.winborder = "rounded"
