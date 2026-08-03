@@ -13,7 +13,12 @@ vim.opt.smartindent = true
 vim.opt.wrap = false
 
 vim.opt.swapfile = false
-vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir"
+-- Windows needs a short, drive-root path: undo filenames encode the full source
+-- path, so stdpath("data") pushed deeply-nested files past the 260-char MAX_PATH
+-- and undo writes failed with E828. macOS and Linux have no such limit and both
+-- resolve to ~/.local/share/nvim/undodir.
+vim.opt.undodir = vim.fn.has("win32") == 1 and "C:/nvim-undo"
+    or vim.fn.stdpath("data") .. "/undodir"
 vim.opt.undofile = true
 
 vim.opt.hlsearch = false
@@ -33,9 +38,9 @@ vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
 
-vim.opt.colorcolumn = "80"
+-- vim.opt.colorcolumn = "80"
 
-vim.opt.list = false
+vim.opt.list = true
 vim.opt.listchars = {
 	space = "·",
 	tab = "→ ",

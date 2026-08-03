@@ -18,6 +18,9 @@ return {
 				"lua",
 				"rust",
 				"go",
+				"gomod", -- go.mod
+				"gowork", -- go.work
+				"gotmpl", -- html/template + text/template ({{ ... }})
 				"python",
 				"vim",
 				"vimdoc",

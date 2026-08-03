@@ -9,6 +9,7 @@ local servers = {
 	"html", -- template HTML (+ htmlangular, see below)
 	"cssls", -- component styles
 	"clangd", -- C
+	"gopls", -- Go: go-to-definition, hover, references, diagnostics
 }
 
 return {

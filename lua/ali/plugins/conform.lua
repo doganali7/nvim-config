@@ -34,6 +34,7 @@ return {
 		require("conform").setup({
 			formatters_by_ft = {
 				lua = { "stylua" },
+				go = { "gofmt" }, -- ships with the Go toolchain (on PATH)
 				python = { "black" }, -- needs :MasonInstall black
 				javascript = prettier,
 				typescript = prettier,
