@@ -22,7 +22,9 @@ for, so these must be on `PATH` before first launch:
 | **Go toolchain** | gopls (also provides `gofmt`, which Mason does not install) |
 | *nothing* | clangd, lua-language-server, stylua — prebuilt binaries |
 
-Also useful: `git`, and a C compiler for treesitter parser builds.
+Not installed by Mason either: `git`, a C compiler for treesitter parser
+builds, and **ripgrep** (`rg`) — telescope shells out to it directly for
+`live_grep` / `grep_string`, so those two pickers are dead without it.
 
 Run `:checkhealth mason` after launching — it reports exactly which of these
 are missing.
@@ -162,5 +164,9 @@ falls back to LSP formatting rather than erroring — just misleading to read.
   TypeScript being >= 5.0 and warns (once) when it skips; `ts_ls` is launched
   with the newest nvm-installed Node so an old project-pinned Node doesn't
   break it. See the comments in `lua/ali/plugins/lsp.lua`.
+- **Picker layout.** Telescope opens full-screen and both telescope and harpoon
+  shorten long paths by dropping whole leading directories rather than
+  abbreviating them (`…\app\feature\file.ts`). Rationale and the tuning knobs
+  are in `lua/ali/plugins/telescope.lua` / `harpoon.lua`.
 - `OPTIMIZATIONS.md` is a dated log of config reviews and their rationale —
   useful history, not setup instructions.

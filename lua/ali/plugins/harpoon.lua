@@ -20,13 +20,12 @@ return {
 	config = function()
 		local harpoon = require("harpoon")
 
-		-- Show the full path, right-aligned to the harpoon window: if it does
-		-- not fit, drop leading directories (never abbreviate them) so the
-		-- file name and as many of its parent folders as fit stay readable.
-		-- Safe to do here: display() runs while the harpoon float is the
-		-- current window, so nvim_win_get_width(0) is the float's real width,
-		-- and harpoon matches list lines on their *displayed* form, so the
-		-- real path is always preserved on save/select.
+		-- Show the full path; if it doesn't fit, drop leading directories
+		-- (never abbreviate them) so the file name and as many parent folders
+		-- as fit stay readable. Safe here: display() runs while the harpoon
+		-- float is the current window, so nvim_win_get_width(0) is its real
+		-- width, and harpoon matches list lines on their *displayed* form, so
+		-- the real path survives save/select.
 		local path_sep = package.config:sub(1, 1)
 
 		local function fit_path(path)
@@ -56,7 +55,6 @@ return {
 			return "…" .. name
 		end
 
-		-- REQUIRED: must call setup() before anything else
 		harpoon:setup({
 			default = {
 				display = function(list_item)
@@ -72,7 +70,7 @@ return {
 			harpoon.ui:toggle_quick_menu(harpoon:list(), {
 				title = " Harpoon ",
 				border = "rounded",
-				ui_width_ratio = 0.95, -- 95% of editor width
+				ui_width_ratio = 1, -- 100% of editor width
 				-- ui_max_width = 120,    -- not wider than 120 columns
 			})
 		end, { desc = "Harpoon menu" })
