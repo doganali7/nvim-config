@@ -12,6 +12,16 @@ local servers = {
 	"gopls", -- Go: go-to-definition, hover, references, diagnostics
 }
 
+-- Non-LSP tools. mason-lspconfig's ensure_installed only accepts lspconfig
+-- server names, so formatters need their own installer to be reproducible on
+-- a new machine. Keep in sync with formatters_by_ft in plugins/conform.lua.
+-- (gofmt is absent on purpose: it ships with the Go toolchain, not Mason.)
+local tools = {
+	"stylua", -- lua
+	"black", -- python
+	"prettierd", -- js, ts, html, css, scss, json, yaml, markdown
+}
+
 return {
 	{
 		"mason-org/mason.nvim",
@@ -43,6 +53,28 @@ return {
 		end,
 	},
 	{
+		"WhoIsSethDaniel/mason-tool-installer.nvim",
+		lazy = true, -- pulled in as a dependency of nvim-lspconfig
+		dependencies = { "mason-org/mason.nvim" },
+		config = function()
+			local mti = require("mason-tool-installer")
+			mti.setup({
+				ensure_installed = tools,
+				-- The plugin's own auto-run hangs off a VimEnter autocmd in its
+				-- plugin/ file. Lazy sources that only when the plugin loads —
+				-- here at BufReadPre, long after VimEnter fired — so the autocmd
+				-- would never trigger and nothing would ever install. Drive it
+				-- from config() instead.
+				run_on_start = false,
+			})
+			-- Cheap in the steady state: with auto_update off and no pinned
+			-- versions, an installed tool is just an is_installed() check, no
+			-- network. Hence no debounce_hours — a missing tool gets fixed on
+			-- the next session rather than up to N hours later.
+			mti.check_install(false)
+		end,
+	},
+	{
 		"neovim/nvim-lspconfig",
 		-- Load as the first real file is being read (BufReadPre fires before
 		-- FileType), so vim.lsp.enable's FileType autocmd is registered in
@@ -50,6 +82,7 @@ return {
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			"mason-org/mason-lspconfig.nvim",
+			"WhoIsSethDaniel/mason-tool-installer.nvim",
 			"saghen/blink.cmp",
 		},
 		config = function()

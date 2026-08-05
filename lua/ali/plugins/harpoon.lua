@@ -20,10 +20,9 @@ return {
 	config = function()
 		local harpoon = require("harpoon")
 
-		-- Shorten a path just enough to fit the harpoon window:
-		--   * if the full path fits, show it untouched
-		--   * otherwise keep the file name (and as many trailing folders as
-		--     fit) intact, collapsing parent folders to a single letter
+		-- Show the full path, right-aligned to the harpoon window: if it does
+		-- not fit, drop leading directories (never abbreviate them) so the
+		-- file name and as many of its parent folders as fit stay readable.
 		-- Safe to do here: display() runs while the harpoon float is the
 		-- current window, so nvim_win_get_width(0) is the float's real width,
 		-- and harpoon matches list lines on their *displayed* form, so the
@@ -41,23 +40,20 @@ return {
 			end
 
 			local parts = vim.split(path, path_sep, { plain = true })
-			local n = #parts
-			-- `full` = how many trailing parts (filename first) stay intact
-			for full = n - 1, 1, -1 do
-				local out = {}
-				for i = 1, n do
-					if i > n - full then
-						out[i] = parts[i]
-					else
-						out[i] = parts[i]:sub(1, 1)
-					end
-				end
-				local s = table.concat(out, path_sep)
-				if vim.api.nvim_strwidth(s) <= width or full == 1 then
+			-- keep as many trailing parts (file name first) as fit behind "…/"
+			for first = 2, #parts do
+				local s = "…" .. path_sep .. table.concat(parts, path_sep, first)
+				if vim.api.nvim_strwidth(s) <= width then
 					return s
 				end
 			end
-			return path
+
+			-- not even the bare file name fits: cut it from the left too
+			local name = parts[#parts]
+			while vim.fn.strchars(name) > 1 and vim.api.nvim_strwidth("…" .. name) > width do
+				name = vim.fn.strcharpart(name, 1)
+			end
+			return "…" .. name
 		end
 
 		-- REQUIRED: must call setup() before anything else
