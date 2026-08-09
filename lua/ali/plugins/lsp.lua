@@ -25,6 +25,9 @@ local tools = {
 return {
 	{
 		"mason-org/mason.nvim",
+		-- Pinned to 2.x: mason-lspconfig's automatic_enable below is a 2.x-only
+		-- key, and the two plugins are released in lockstep.
+		version = "^2",
 		-- Lazy: loads via the dependency chain when nvim-lspconfig loads at
 		-- BufReadPre, or on any :Mason* command — no work at startup before a
 		-- file opens. All commands are listed so e.g. :MasonUpdate works even
@@ -37,20 +40,19 @@ return {
 			"MasonUpdate",
 			"MasonLog",
 		},
-		config = function()
-			require("mason").setup()
-		end,
+		opts = {},
 	},
 	{
 		"mason-org/mason-lspconfig.nvim",
+		-- automatic_enable is a 2.x-only key: a 3.x release would silently
+		-- change the semantics and leave every server disabled.
+		version = "^2",
 		lazy = true, -- pulled in as a dependency of nvim-lspconfig
 		dependencies = { "mason-org/mason.nvim" },
-		config = function()
-			require("mason-lspconfig").setup({
-				ensure_installed = servers,
-				automatic_enable = false,
-			})
-		end,
+		opts = {
+			ensure_installed = servers,
+			automatic_enable = false,
+		},
 	},
 	{
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -114,7 +116,7 @@ return {
 
 			-- Keymaps: only active when an LSP server attaches
 			vim.api.nvim_create_autocmd("LspAttach", {
-				group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+				group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
 				callback = function(ev)
 					local function map(mode, lhs, rhs, desc)
 						vim.keymap.set(mode, lhs, rhs, { buffer = ev.buf, desc = desc })

@@ -23,6 +23,10 @@ return {
 	-- },
 	{
 		"Mofiqul/vscode.nvim",
+		-- A colorscheme has to be a start plugin, and `priority` only has an
+		-- effect on start plugins — spell both out so adding an event/keys
+		-- trigger later can't silently make the priority a no-op.
+		lazy = false,
 		priority = 1000,
 		config = function()
 			require("vscode").setup({

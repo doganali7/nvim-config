@@ -23,6 +23,9 @@ require("lazy").setup({
 	spec = {
 		{ import = "ali.plugins" }, -- auto-loads every lua/ali/plugins/*.lua
 	},
+	-- Use the real colorscheme in the install window on a fresh bootstrap,
+	-- instead of the default one, while plugins are still being cloned
+	install = { colorscheme = { "vscode" } },
 	-- This config changes rarely; skip the spec-file watchers entirely
 	change_detection = { enabled = false, notify = false },
 	-- No plugin needs luarocks — disabling removes the permanent

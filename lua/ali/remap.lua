@@ -1,4 +1,8 @@
 vim.g.mapleader = " "
+-- Set explicitly rather than relying on the default: lazy.nvim resolves
+-- <localleader> in plugin `keys` specs at setup() time, so it has to be
+-- defined before lazy_init runs (see lua/ali/init.lua for the order).
+vim.g.maplocalleader = "\\"
 
 -- File explorer (netrw)
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "File explorer (netrw)" })

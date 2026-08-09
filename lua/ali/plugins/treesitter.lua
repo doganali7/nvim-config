@@ -36,6 +36,7 @@ return {
 			})
 
 			vim.api.nvim_create_autocmd("FileType", {
+				group = vim.api.nvim_create_augroup("UserTreesitter", { clear = true }),
 				callback = function(ev)
 					-- Skip silently when no parser exists for the filetype,
 					-- but let real parser/query errors surface.

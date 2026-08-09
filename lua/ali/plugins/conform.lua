@@ -30,27 +30,25 @@ return {
 			desc = "Format buffer (conform)",
 		},
 	},
-	config = function()
-		require("conform").setup({
-			formatters_by_ft = {
-				lua = { "stylua" },
-				go = { "gofmt" }, -- ships with the Go toolchain (on PATH)
-				python = { "black" }, -- needs :MasonInstall black
-				javascript = prettier,
-				typescript = prettier,
-				html = prettier,
-				htmlangular = prettier,
-				css = prettier,
-				scss = prettier,
-				json = prettier,
-				yaml = prettier,
-				markdown = prettier,
-			},
-			-- To enable format-on-save, set e.g.
-			--   format_on_save = { timeout_ms = 2000, lsp_format = "fallback" },
-			-- AND restore `event = { "BufWritePre" }` in the spec above —
-			-- the autocmd is only created inside setup(), which never runs
-			-- on save under the current cmd/keys-only lazy loading.
-		})
-	end,
+	opts = {
+		formatters_by_ft = {
+			lua = { "stylua" },
+			go = { "gofmt" }, -- ships with the Go toolchain (on PATH)
+			python = { "black" },
+			javascript = prettier,
+			typescript = prettier,
+			html = prettier,
+			htmlangular = prettier,
+			css = prettier,
+			scss = prettier,
+			json = prettier,
+			yaml = prettier,
+			markdown = prettier,
+		},
+		-- To enable format-on-save, set e.g.
+		--   format_on_save = { timeout_ms = 2000, lsp_format = "fallback" },
+		-- AND restore `event = { "BufWritePre" }` in the spec above —
+		-- the autocmd is only created inside setup(), which never runs
+		-- on save under the current cmd/keys-only lazy loading.
+	},
 }
