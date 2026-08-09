@@ -1,7 +1,8 @@
 # nvim-config
 
 Personal Neovim config. Neovim **0.11+** required (uses `vim.lsp.config` /
-`vim.lsp.enable`); developed against 0.12.x on Windows.
+`vim.lsp.enable`); developed against 0.12.x to work cross-platform on
+Windows / Linux / macOS.
 
 Plugin management is [lazy.nvim](https://github.com/folke/lazy.nvim), which
 bootstraps itself on first launch — plugin versions come from `lazy-lock.json`.
@@ -166,7 +167,7 @@ falls back to LSP formatting rather than erroring — just misleading to read.
   break it. See the comments in `lua/ali/plugins/lsp.lua`.
 - **Picker layout.** Telescope opens full-screen and both telescope and harpoon
   shorten long paths by dropping whole leading directories rather than
-  abbreviating them (`…\app\feature\file.ts`). Rationale and the tuning knobs
+  abbreviating them (`…/app/feature/file.ts`). Rationale and the tuning knobs
   are in `lua/ali/plugins/telescope.lua` / `harpoon.lua`.
 - `OPTIMIZATIONS.md` is a dated log of config reviews and their rationale —
   useful history, not setup instructions.
